@@ -10,10 +10,11 @@ class ViewController: UIViewController {
     @IBOutlet var thirdTipButton: UIButton!
     var billLogic = BillLogic()
 
-    var split: Double = 0.0
+    var split: Double = 2.0
     var tip: Double = 0.0
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateUI(firstBillButton)
     }
 
     @IBAction func calculateBill(_ sender: UIButton) {
@@ -25,19 +26,20 @@ class ViewController: UIViewController {
     }
 
     @IBAction func billSelected(_ sender: UIButton) {
-        updateUI(sender.currentTitle!)
-        tip = Double(sender.currentTitle?.trimmingCharacters(in: ["%"]) ?? "0.0")!
+        updateUI(sender)
+        tip = Double(sender.currentTitle?.dropLast() ?? "0.0")!
     }
 
     @IBAction func splitChanged(_ sender: UIStepper) {
         split = sender.value
-        splitLabel.text = String(Int(split))
+        splitLabel.text = String(format: "%.0f", split)
     }
 
-    func updateUI(_ buttonTitle: String) {
-        firstBillButton.isSelected = buttonTitle == firstBillButton.currentTitle!
-        secondTipButton.isSelected = buttonTitle == secondTipButton.currentTitle!
-        thirdTipButton.isSelected = buttonTitle == thirdTipButton.currentTitle!
+    func updateUI(_ button: UIButton) {
+        firstBillButton.isSelected = false
+        secondTipButton.isSelected = false
+        thirdTipButton.isSelected = false
+        button.isSelected = true
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
